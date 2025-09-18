@@ -6,17 +6,16 @@ Resources:
       DBInstanceClass: db.t3.micro
       Engine: aurora-postgresql
       EngineVersion: '15.8' # Or your preferred version
+      DBInstanceIdentifier: awspdu-ptsql001
       MasterUsername: masteruser
       MasterUserPassword: xzfxgzfgzfgfz # CHANGE THIS TO A SECURE PASSWORD!
       PubliclyAccessible: true # Recommended for security
       DBName: db2
-      Parameters:
-        DBInstanceIdentifier: awspdu-ptsql001
       
-
+        
   LittleS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: Private
-      Parameters:
-        BucketName: LPLittleS3Bucket
+      BucketName: LPLittleS3Bucket
+        
