@@ -11,7 +11,7 @@ Resources:
       PubliclyAccessible: true # Recommended for security
       DBName: db2
 
-    LittleS3Bucket:
+  LittleS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: Private
