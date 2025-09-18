@@ -2,8 +2,6 @@ Resources:
   CfnTestRDSInstance:
     Type: AWS::RDS::DBInstance
     Properties:
-      AllocatedStorage: '20'
-      DBInstanceClass: db.t3.micro
       Engine: aurora-postgresql
       EngineVersion: '15.8' # Or your preferred version
       DBInstanceIdentifier: awspdu-ptsql001
