@@ -3,7 +3,7 @@ Resources:
     Type: AWS::RDS::DBInstance
     Properties:
       Engine: aurora-postgresql
-      EngineVersion: '15.8' # Or your preferred version
+      #EngineVersion: '15.8' # Or your preferred version
       DBInstanceIdentifier: awspdu-ptsql001
       DBInstanceClass: db.t4g.medium
       MasterUsername: masteruser
