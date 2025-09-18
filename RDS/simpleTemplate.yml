@@ -17,5 +17,5 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: Private
-      BucketName: LPLittleS3Bucket
+      BucketName: lplittles3bucket
         
