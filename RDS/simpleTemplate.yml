@@ -1,20 +1,24 @@
 Resources:
-  CfnTestRDSInstance:
-    Type: AWS::RDS::DBInstance
-    Properties:
-      Engine: aurora-postgresql
-      #EngineVersion: '15.8' # Or your preferred version
-      DBInstanceIdentifier: awspdu-ptsql001
-      DBInstanceClass: db.t4g.medium
-      MasterUsername: masteruser
-      MasterUserPassword: xzfxgzfgzfgfz # CHANGE THIS TO A SECURE PASSWORD!
-      PubliclyAccessible: true # Recommended for security
-      DBName: db2
-      
-        
   LittleS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: Private
       BucketName: lplittles3bucket
-        
+
+  LittleAuroraDBCluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      DBClusterIdentifier: mylittleauroracluster
+      Engine: aurora-postgresql
+      MasterUsername: aurorauser
+      MasterUserPassword: asdfhuiwelhfuiaslfiwejh
+      DBName: samplelittledb
+
+  AuroritaDBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: auroritadbinstance
+      DBClusterIdentifier: !Ref LittleAuroraDBCluster
+      DBInstanceClass: db.t4g.medium
+      Engine: aurora-postgresql
+      PubliclyAccessible: false
