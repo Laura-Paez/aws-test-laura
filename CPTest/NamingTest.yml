@@ -1,0 +1,6 @@
+Resources:
+  UglyNameS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: uglyname3bucket
