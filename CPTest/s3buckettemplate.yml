@@ -11,5 +11,3 @@ Resources:
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
       
-      # Set the Access Control List (ACL) to Private
-      AccessControl: Private
