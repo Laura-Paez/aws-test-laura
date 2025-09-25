@@ -1,0 +1,85 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Lambda and it's Roles to send an Email with a report to the Hosting DBA team
+Resources:
+  # IAM Role for the Lambda function
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "hosting-dba-report-backups-role"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaCloudWatchLogsAndSendMail
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: '*' 
+              - Effect: Allow
+                Action:
+                  -  'ses:SendEmail'
+                  -  'ses:SendRawEmail'
+                Resource: '*'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonMemoryDBReadOnlyAccess'
+        - 'arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess'
+        - 'arn:aws:iam::aws:policy/AmazonRDSReadOnlyAccess'
+        - 'arn:aws:iam::aws:policy/AWSAccountManagementReadOnlyAccess'
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+  # The Lambda function resource
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: hosting-dba-report-backup
+      Handler: index.handler
+      Runtime: python3.12
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        # Assuming your code zip file is uploaded to an S3 bucket
+        S3Bucket: lplittles3bucket
+        S3Key: mylambdatest.zip
+      Description: A simple Lambda deployed with CloudFormation
+      Timeout: 600
+      MemorySize: 128
+
+#Eventbridge schedule role
+  SchedulerExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "hosting-dba-report-backups-eventbridge-role"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: scheduler.amazonaws.com # Trust policy for the scheduler service
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: SchedulerInvokeLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: lambda:InvokeFunction # Permission to invoke the Lambda function
+                Resource: !GetAtt LambdaFunction.Arn # Use the Lambda ARN
+                
+#Eventbridge schedule
+  MyEventBridgeSchedule:
+    Type: AWS::Scheduler::Schedule
+    Properties:
+      Name: "hosting-dba-report-backups-schedule"
+      ScheduleExpression: cron(00 2 * * ? *)
+      FlexibleTimeWindow:
+        Mode: "OFF"
+      Target:
+        Arn: !GetAtt LambdaFunction.Arn
+        RoleArn: !GetAtt SchedulerExecutionRole.Arn
