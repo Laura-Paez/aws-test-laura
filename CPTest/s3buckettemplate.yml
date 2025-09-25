@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Simple CloudFormation template to create a private S3 bucket.
+Resources:
+  MySimpleS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      # Recommended best practice: Block all public access by default.
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      
+      # Set the Access Control List (ACL) to Private
+      AccessControl: Private
