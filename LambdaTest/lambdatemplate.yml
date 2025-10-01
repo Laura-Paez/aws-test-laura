@@ -40,13 +40,13 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: hosting-dba-report-backup
-      Handler: index.lambda_handler
+      Handler: lambda_function.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
         # Assuming your code zip file is uploaded to an S3 bucket
         S3Bucket: lplittles3bucket
-        S3Key: mylambdatest.zip
+        S3Key: report_lambda_content.zip
       Description: A simple Lambda deployed with CloudFormation
       Timeout: 600
       MemorySize: 128
