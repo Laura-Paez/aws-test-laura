@@ -40,7 +40,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: hosting-dba-report-backup
-      Handler: index.handler
+      Handler: index.py
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
